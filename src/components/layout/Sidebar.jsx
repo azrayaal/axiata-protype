@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import {
-  LayoutDashboard, FileText, ChevronDown, ChevronRight,
-  FolderOpen, Upload, BookOpen,
-} from 'lucide-react'
+import { ChevronDown, ChevronRight, LayoutDashboard } from 'lucide-react'
 import { useAuth, ROLES } from '../../contexts/AuthContext'
 
-const NavItem = ({ to, icon: Icon, label, end = false }) => (
+import kontrakIcon from '../../assets/kontrak.png'
+import repositoryIcon from '../../assets/repository.png'
+
+const NavItem = ({ to, icon: Icon, iconImg, label, end = false }) => (
   <NavLink
     to={to}
     end={end}
@@ -18,12 +18,21 @@ const NavItem = ({ to, icon: Icon, label, end = false }) => (
       }`
     }
   >
-    <Icon size={18} />
-    <span>{label}</span>
+    {({ isActive }) => (
+      <>
+        {iconImg
+          ? <img src={iconImg} alt="" className="w-[18px] h-[18px] object-contain flex-shrink-0" style={{ filter: isActive ? 'brightness(0) invert(1)' : 'none' }} />
+          : Icon
+            ? <Icon size={18} />
+            : <span className="w-[18px] flex-shrink-0" />
+        }
+        <span>{label}</span>
+      </>
+    )}
   </NavLink>
 )
 
-const NavGroup = ({ icon: Icon, label, children, defaultOpen = false }) => {
+const NavGroup = ({ icon: Icon, iconImg, label, children, defaultOpen = false }) => {
   const location = useLocation()
   const childArray = Array.isArray(children) ? children : [children]
   const childPaths = childArray.map(c => c?.props?.to).filter(Boolean)
@@ -34,12 +43,15 @@ const NavGroup = ({ icon: Icon, label, children, defaultOpen = false }) => {
     <div>
       <button
         onClick={() => setOpen(o => !o)}
-        className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg mx-2 text-sm font-medium transition-all duration-150 ${
+        className={`flex items-center gap-3 px-4 py-2.5 rounded-lg mx-2 text-sm font-medium transition-all duration-150 ${
           isChildActive ? 'text-[#1a3a6b] font-semibold' : 'text-gray-600 hover:bg-blue-50 hover:text-[#1a3a6b]'
         }`}
         style={{ width: 'calc(100% - 16px)' }}
       >
-        <Icon size={18} />
+        {iconImg
+          ? <img src={iconImg} alt="" className="w-[18px] h-[18px] object-contain flex-shrink-0" style={{ filter: isChildActive ? 'invert(18%) sepia(72%) saturate(600%) hue-rotate(195deg) brightness(85%)' : 'none' }} />
+          : <Icon size={18} />
+        }
         <span className="flex-1 text-left">{label}</span>
         {open ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
       </button>
@@ -66,18 +78,18 @@ export default function Sidebar({ isOpen }) {
         <NavItem to="/dashboard" icon={LayoutDashboard} label="Dashboard" end />
 
         {isLegal ? (
-          <NavGroup icon={FileText} label="Kontrak" defaultOpen>
-            <NavItem to="/review" icon={FileText} label="Daftar Kontrak" />
+          <NavGroup iconImg={kontrakIcon} label="Kontrak" defaultOpen>
+            <NavItem to="/review" icon={null} label="Daftar Kontrak" />
           </NavGroup>
         ) : (
-          <NavGroup icon={FileText} label="Kontrak" defaultOpen>
-            <NavItem to="/kontrak/daftar" icon={FileText} label="Daftar Kontrak" />
-            <NavItem to="/kontrak/upload-revisi" icon={Upload} label="Upload Revisi" />
+          <NavGroup iconImg={kontrakIcon} label="Kontrak" defaultOpen>
+            <NavItem to="/kontrak/daftar" icon={null} label="Daftar Kontrak" />
+            <NavItem to="/kontrak/upload-revisi" icon={null} label="Upload Revisi" />
           </NavGroup>
         )}
 
-        <NavGroup icon={FolderOpen} label="Repository">
-          <NavItem to="/repository" icon={BookOpen} label="Daftar Dokumen" />
+        <NavGroup iconImg={repositoryIcon} label="Repository">
+          <NavItem to="/repository" icon={null} label="Daftar Dokumen" />
         </NavGroup>
       </nav>
 

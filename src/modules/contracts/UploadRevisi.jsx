@@ -49,7 +49,7 @@ export default function UploadRevisi() {
         <h1 className="text-2xl font-bold text-gray-800">Upload Revisi Dokumen</h1>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-5 max-w-2xl">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-5">
         <div>
           <label className="block text-xs font-semibold text-gray-600 mb-1.5">Pilih Kontrak <span className="text-red-500">*</span></label>
           <select
